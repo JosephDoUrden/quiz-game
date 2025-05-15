@@ -2,6 +2,8 @@
 
 ![QuizMaster Pro Screenshot](screenshot.png)
 
+![QuizMaster Pro Demo](demo.gif)
+
 ## Overview
 
 QuizMaster Pro is a modern, responsive quiz application built with vanilla JavaScript. This interactive quiz features multiple categories, difficulty levels, and provides instant feedback to users. The application showcases front-end development skills including DOM manipulation, event handling, animations, and responsive design.
