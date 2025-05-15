@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="QuizMaster Pro - A professional interactive quiz application with multiple categories and difficulty levels" />
+  <meta name="author" content="Yusufhan Sacak" />
+  <title>QuizMaster Pro | Interactive Learning</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <header class="quiz-header-brand">
+      <div class="logo">
+        <i class="fas fa-brain"></i>
+        <span>QuizMaster Pro</span>
+      </div>
+      <div class="portfolio-info">
+        <a href="https://yusufhan.dev" id="portfolio-link" title="View Portfolio"><i class="fas fa-user-circle"></i></a>
+      </div>
+    </header>
+
+    <div class="screen active" id="start-screen">
+      <div class="start-content">
+        <h1>Welcome to QuizMaster Pro</h1>
+        <p>Challenge yourself with our carefully crafted questions</p>
+
+        <div class="category-selector">
+          <h3><i class="fas fa-th-list"></i> Select Categories</h3>
+          <div class="categories">
+            <label class="category-checkbox">
+              <input type="checkbox" value="webDevelopment" checked> Web Development
+            </label>
+            <label class="category-checkbox">
+              <input type="checkbox" value="dataScience" checked> Data Science
+            </label>
+            <label class="category-checkbox">
+              <input type="checkbox" value="cybersecurity" checked> Cybersecurity
+            </label>
+          </div>
+        </div>
+
+        <div class="difficulty-selector">
+          <h3><i class="fas fa-sliders-h"></i> Difficulty Level</h3>
+          <div class="difficulty-options">
+            <label class="difficulty-radio">
+              <input type="radio" name="difficulty" value="all" checked> All Levels
+            </label>
+            <label class="difficulty-radio">
+              <input type="radio" name="difficulty" value="easy"> Easy
+            </label>
+            <label class="difficulty-radio">
+              <input type="radio" name="difficulty" value="medium"> Medium
+            </label>
+            <label class="difficulty-radio">
+              <input type="radio" name="difficulty" value="hard"> Hard
+            </label>
+          </div>
+        </div>
+
+        <div class="features">
+          <div class="feature">
+            <i class="fas fa-bolt"></i>
+            <span>Instant Feedback</span>
+          </div>
+          <div class="feature">
+            <i class="fas fa-chart-line"></i>
+            <span>Performance Analytics</span>
+          </div>
+          <div class="feature">
+            <i class="fas fa-medal"></i>
+            <span>Skill Assessment</span>
+          </div>
+        </div>
+        <button id="start-btn"><i class="fas fa-play"></i> Start Quiz</button>
+      </div>
+    </div>
+
+    <div class="screen" id="quiz-screen">
+      <div class="quiz-header">
+        <div class="category-badge" id="current-category">Web Development</div>
+        <h2 id="question-text">Question goes here</h2>
+        <div class="quiz-info">
+          <div class="question-count">
+            <i class="fas fa-question-circle"></i>
+            <span>Question <span id="current-question">1</span> of <span id="total-questions">5</span></span>
+          </div>
+
+          <div class="score-display">
+            <i class="fas fa-star"></i>
+            <span>Score: <span id="score">0</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="answers-container" class="answers-container">
+        <!-- Answer buttons will be inserted here from our js code -->
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div id="progress" class="progress"></div>
+        </div>
+        <div class="timer">
+          <i class="fas fa-clock"></i>
+          <span id="time-left">15</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-screen" class="screen">
+      <div class="result-content">
+        <div class="result-icon">
+          <i class="fas fa-award"></i>
+        </div>
+        <h1>Quiz Results</h1>
+        <div class="result-info">
+          <div class="score-circle">
+            <div class="score-number">
+              <span id="final-score">0</span>/<span id="max-score">5</span>
+            </div>
+          </div>
+          <div id="result-message">Good job!</div>
+        </div>
+
+        <div class="analytics-section">
+          <h3><i class="fas fa-chart-pie"></i> Performance Analytics</h3>
+          <div class="analytics-grid">
+            <div class="analytics-card">
+              <div class="analytics-title">By Category</div>
+              <div id="category-analytics" class="analytics-content">
+                <!-- Will be populated by JS -->
+              </div>
+            </div>
+            <div class="analytics-card">
+              <div class="analytics-title">By Difficulty</div>
+              <div id="difficulty-analytics" class="analytics-content">
+                <!-- Will be populated by JS -->
+              </div>
+            </div>
+            <div class="analytics-card">
+              <div class="analytics-title">Time Performance</div>
+              <div id="time-analytics" class="analytics-content">
+                <!-- Will be populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="restart-btn"><i class="fas fa-redo"></i> Try Again</button>
+          <button id="share-btn"><i class="fas fa-share-alt"></i> Share Results</button>
+        </div>
+
+        <div class="portfolio-callout">
+          <p>This quiz application was developed by <a href="https://yusufhan.dev" id="developer-link">Yusufhan
+              Sacak</a> as part of a web
+            development portfolio.</p>
+          <p>View the <a href="https://github.com/JosephDoUrden/quiz-game" target="_blank">source code</a> or explore
+            more projects.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
