@@ -183,13 +183,18 @@ let quizQuestions = [
   ...quizData.cybersecurity,
 ];
 
-// Analytics data
+// Initialize more detailed analytics object
 let analytics = {
   categoryPerformance: {},
   difficultyPerformance: {},
+  timePerQuestion: [],
   averageTimePerQuestion: 0,
   totalTimeTaken: 0,
   questionsAnswered: 0,
+  correctByCategory: {},
+  totalByCategory: {},
+  correctByDifficulty: {},
+  totalByDifficulty: {},
 };
 
 // QUIZ STATE VARS
@@ -199,6 +204,7 @@ let answersDisabled = false;
 let timer;
 let timeLeft = 15; // Time in seconds for each question
 let timerInterval;
+let questionStartTime = 0;
 
 totalQuestionsSpan.textContent = quizQuestions.length;
 maxScoreSpan.textContent = quizQuestions.length;
@@ -209,6 +215,20 @@ restartButton.addEventListener("click", restartQuiz);
 shareButton.addEventListener("click", shareResults);
 
 function startQuiz() {
+  // Reset analytics data
+  analytics = {
+    categoryPerformance: {},
+    difficultyPerformance: {},
+    timePerQuestion: [],
+    averageTimePerQuestion: 0,
+    totalTimeTaken: 0,
+    questionsAnswered: 0,
+    correctByCategory: {},
+    totalByCategory: {},
+    correctByDifficulty: {},
+    totalByDifficulty: {},
+  };
+
   // reset vars
   currentQuestionIndex = 0;
   score = 0;
@@ -281,6 +301,29 @@ function showQuestion() {
       button.style.transform = "translateY(0)";
     }, 100 * index);
   });
+
+  // Track question start time for analytics
+  questionStartTime = Date.now();
+
+  // Track category and difficulty for analytics
+  const category = currentQuestion.category || "General";
+  const difficulty = currentQuestion.difficulty || "medium";
+
+  // Initialize category tracking if not exists
+  if (!analytics.totalByCategory[category]) {
+    analytics.totalByCategory[category] = 0;
+    analytics.correctByCategory[category] = 0;
+  }
+
+  // Initialize difficulty tracking if not exists
+  if (!analytics.totalByDifficulty[difficulty]) {
+    analytics.totalByDifficulty[difficulty] = 0;
+    analytics.correctByDifficulty[difficulty] = 0;
+  }
+
+  // Update totals
+  analytics.totalByCategory[category]++;
+  analytics.totalByDifficulty[difficulty]++;
 
   // Start the timer
   startTimer();
@@ -355,9 +398,23 @@ function selectAnswer(event) {
     button.style.pointerEvents = "none";
   });
 
+  // Track time spent on this question
+  const timeSpent = (Date.now() - questionStartTime) / 1000; // Convert to seconds
+  analytics.timePerQuestion.push(timeSpent);
+  analytics.totalTimeTaken += timeSpent;
+  analytics.questionsAnswered++;
+
+  const currentQuestion = quizQuestions[currentQuestionIndex];
+  const category = currentQuestion.category || "General";
+  const difficulty = currentQuestion.difficulty || "medium";
+
   if (isCorrect) {
     score++;
     scoreSpan.textContent = score;
+
+    // Update analytics for correct answer
+    analytics.correctByCategory[category]++;
+    analytics.correctByDifficulty[difficulty]++;
 
     // Add visual feedback for correct answer
     createConfetti(selectedButton);
@@ -452,11 +509,36 @@ function getRandomColor() {
 
 function showResults() {
   resetTimer();
+
+  // Calculate average time per question
+  if (analytics.questionsAnswered > 0) {
+    analytics.averageTimePerQuestion =
+      analytics.totalTimeTaken / analytics.questionsAnswered;
+  }
+
+  // Calculate performance percentages
+  Object.keys(analytics.totalByCategory).forEach((category) => {
+    analytics.categoryPerformance[category] =
+      (analytics.correctByCategory[category] /
+        analytics.totalByCategory[category]) *
+      100;
+  });
+
+  Object.keys(analytics.totalByDifficulty).forEach((difficulty) => {
+    analytics.difficultyPerformance[difficulty] =
+      (analytics.correctByDifficulty[difficulty] /
+        analytics.totalByDifficulty[difficulty]) *
+      100;
+  });
+
   quizScreen.classList.remove("active");
   setTimeout(() => {
     resultScreen.classList.add("active");
 
     finalScoreSpan.textContent = score;
+
+    // Display analytics
+    displayAnalytics();
 
     const percentage = (score / quizQuestions.length) * 100;
 
@@ -472,6 +554,85 @@ function showResults() {
       resultMessage.textContent = "Keep learning! You'll get better!";
     }
   }, 300);
+}
+
+// New function to display analytics in the results screen
+function displayAnalytics() {
+  const categoryAnalyticsEl = document.getElementById("category-analytics");
+  const difficultyAnalyticsEl = document.getElementById("difficulty-analytics");
+  const timeAnalyticsEl = document.getElementById("time-analytics");
+
+  if (categoryAnalyticsEl) {
+    let categoryHTML = "";
+    Object.keys(analytics.categoryPerformance).forEach((category) => {
+      const percent = Math.round(analytics.categoryPerformance[category]);
+      const correct = analytics.correctByCategory[category];
+      const total = analytics.totalByCategory[category];
+
+      categoryHTML += `
+        <div class="analytics-item">
+          <div class="analytics-label">${category}</div>
+          <div class="analytics-bar-container">
+            <div class="analytics-bar" style="width: ${percent}%"></div>
+            <div class="analytics-value">${correct}/${total} (${percent}%)</div>
+          </div>
+        </div>
+      `;
+    });
+    categoryAnalyticsEl.innerHTML =
+      categoryHTML || "No category data available";
+  }
+
+  if (difficultyAnalyticsEl) {
+    let difficultyHTML = "";
+    Object.keys(analytics.difficultyPerformance).forEach((difficulty) => {
+      const percent = Math.round(analytics.difficultyPerformance[difficulty]);
+      const correct = analytics.correctByDifficulty[difficulty];
+      const total = analytics.totalByDifficulty[difficulty];
+
+      difficultyHTML += `
+        <div class="analytics-item">
+          <div class="analytics-label">${
+            difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
+          }</div>
+          <div class="analytics-bar-container">
+            <div class="analytics-bar" style="width: ${percent}%"></div>
+            <div class="analytics-value">${correct}/${total} (${percent}%)</div>
+          </div>
+        </div>
+      `;
+    });
+    difficultyAnalyticsEl.innerHTML =
+      difficultyHTML || "No difficulty data available";
+  }
+
+  if (timeAnalyticsEl) {
+    // Format the time values to match the screenshot (1.0s, 0.4s, 4.5s format)
+    const avgTime = analytics.averageTimePerQuestion.toFixed(1);
+    const fastestTime = Math.min(...analytics.timePerQuestion).toFixed(1);
+    const slowestTime = Math.max(...analytics.timePerQuestion).toFixed(1);
+
+    // Create the time performance display with the new UI
+    timeAnalyticsEl.innerHTML = `
+      <div class="analytics-card">
+        <div class="analytics-title">Time Performance</div>
+        <div class="time-stats">
+          <div class="time-stat">
+            <div class="time-value">${avgTime}s</div>
+            <div class="time-label">Average</div>
+          </div>
+          <div class="time-stat">
+            <div class="time-value">${fastestTime}s</div>
+            <div class="time-label">Fastest</div>
+          </div>
+          <div class="time-stat">
+            <div class="time-value">${slowestTime}s</div>
+            <div class="time-label">Slowest</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 }
 
 function restartQuiz() {

@@ -443,6 +443,7 @@ body {
   border-radius: var(--radius);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  margin-bottom: 1.5rem;
 }
 
 .analytics-title {
@@ -517,6 +518,162 @@ button:hover {
 
 #share-btn:hover {
   background-color: rgba(67, 97, 238, 0.1);
+}
+
+/* Analytics Bar Charts */
+.analytics-item {
+  margin-bottom: 0.8rem;
+}
+
+.analytics-label {
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+.analytics-bar-container {
+  height: 20px;
+  background: var(--gray-light);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.analytics-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--success) 100%);
+  border-radius: 10px;
+  transition: width 1s ease-in-out;
+}
+
+.analytics-value {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  font-size: 0.75rem;
+  line-height: 20px;
+  color: var(--dark);
+  font-weight: 500;
+}
+
+/* Time Stats */
+.time-stats {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.time-stat {
+  padding: 0.8rem;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  width: 30%;
+}
+
+.time-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.time-label {
+  font-size: 0.8rem;
+  color: var(--gray);
+  margin-top: 0.3rem;
+}
+
+/* Animation for analytics bars */
+@keyframes growBar {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.analytics-bar {
+  animation: growBar 1.5s ease-out;
+}
+
+/* Responsive fixes for analytics */
+@media (max-width: 700px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .time-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .time-stat {
+    width: 100%;
+  }
+}
+
+/* Time Performance Analytics Styling - Updated to match screenshot */
+.analytics-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  background-color: white;
+  margin-bottom: 1.5rem;
+}
+
+.analytics-title {
+  background-color: #4361ee;
+  color: white;
+  padding: 0.8rem;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.time-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 2px;
+  background-color: #f5f7fb;
+  padding: 1rem;
+}
+
+.time-stat {
+  flex: 1;
+  text-align: center;
+  background-color: #f0f2f9;
+  border-radius: 8px;
+  padding: 0.8rem;
+}
+
+.time-value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #4361ee;
+  margin-bottom: 0.2rem;
+}
+
+.time-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* Responsive styles for Time Performance */
+@media (max-width: 767px) {
+  .time-stats {
+    padding: 0.5rem;
+    gap: 4px;
+  }
+
+  .time-stat {
+    padding: 0.6rem 0.4rem;
+  }
+
+  .time-value {
+    font-size: 1.2rem;
+  }
 }
 
 /* RESPONSIVE DESIGN */
