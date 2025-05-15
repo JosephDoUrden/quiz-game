@@ -235,6 +235,22 @@ function showQuestion() {
 
   questionText.textContent = currentQuestion.question;
 
+  // Update category badge
+  const categoryBadge = document.getElementById("current-category");
+  if (categoryBadge) {
+    categoryBadge.textContent = currentQuestion.category || "General";
+
+    // Adjust position to prevent overlap
+    const questionWidth = questionText.offsetWidth;
+    const badgeWidth = categoryBadge.offsetWidth;
+
+    if (badgeWidth > questionWidth / 3) {
+      categoryBadge.style.top = "-0.5rem";
+    } else {
+      categoryBadge.style.top = "0.75rem";
+    }
+  }
+
   answersContainer.innerHTML = "";
 
   currentQuestion.answers.forEach((answer, index) => {

@@ -211,9 +211,10 @@ body {
   position: relative;
 }
 
+/* Fix for category badge overlapping with question */
 .category-badge {
   position: absolute;
-  top: 1rem;
+  top: 0.75rem;
   right: 2rem;
   background: var(--primary);
   color: white;
@@ -221,14 +222,21 @@ body {
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 500;
+  z-index: 5;
+  /* Ensure it's above other elements */
 }
 
 #question-text {
   color: var(--dark);
   font-size: 1.6rem;
+  margin-top: 1.5rem;
+  /* Add space at the top for the badge */
   margin-bottom: 1.5rem;
   line-height: 1.4;
   font-weight: 600;
+  position: relative;
+  padding-right: 100px;
+  /* Make space for the category badge */
 }
 
 .quiz-info {
